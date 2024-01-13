@@ -31,18 +31,18 @@ class TransformerEncoder(nn.Module):
 
     def forward(self, src, src_mask, src_padding_mask):
         src_emb = self.embedding(src) * math.sqrt(self.emb_size)
-        print("nan count in embedding: ", torch.isnan(src_emb).sum().item())
+        #print("nan count in embedding: ", torch.isnan(src_emb).sum().item())
         src_emb = self.pos_encoder(src_emb)
-        print(f"Max value in pos encoding: {src_emb.max().item()}, Min value pos encoding: {src_emb.min().item()}")
-        print(f"stddev value pos encoding: {src_emb.std().item()}, mean value pos encoding: {src_emb.mean().item()}")
-        print("nan count in pos encoder: ", torch.isnan(src_emb).sum().item())
-        print("nan count in src: ", torch.isnan(src).sum().item())
-        print("nan count in src_mask: ", torch.isnan(src_mask).sum().item())
-        print("nan count in src_padding_mask: ", torch.isnan(src_padding_mask).sum().item())
+        #print(f"Max value in pos encoding: {src_emb.max().item()}, Min value pos encoding: {src_emb.min().item()}")
+        #print(f"stddev value pos encoding: {src_emb.std().item()}, mean value pos encoding: {src_emb.mean().item()}")
+        #print("nan count in pos encoder: ", torch.isnan(src_emb).sum().item())
+        #print("nan count in src: ", torch.isnan(src).sum().item())
+        #print("nan count in src_mask: ", torch.isnan(src_mask).sum().item())
+        #print("nan count in src_padding_mask: ", torch.isnan(src_padding_mask).sum().item())
         output = self.transformer_encoder(src_emb, mask=src_mask, src_key_padding_mask=src_padding_mask)
         # assert no nan values
         #assert torch.isnan(output).sum() == 0, f"output contains {torch.isnan(output).sum()} nan values"
-        print("nan count in encoder: ", torch.isnan(output).sum().item())
+        #print("nan count in encoder: ", torch.isnan(output).sum().item())
         return output
 
 class TransformerDecoder(nn.Module):
@@ -72,6 +72,7 @@ class Seq2SeqTransformer(nn.Module):
         self.device = device
 
     def forward(self, x):
+        print("forward")
         src = x
         tgt=self.shift_right(src)
         src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = self.create_mask(src, tgt)
